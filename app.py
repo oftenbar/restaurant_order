@@ -22,6 +22,9 @@ def send_to_airtable(order):
         "Authorization": f"Bearer {AIRTABLE_TOKEN}",
         "Content-Type": "application/json"
     }
+    print("🧩 Debug Airtable headers:", headers)
+    print("🔑 AIRTABLE_TOKEN starts with:", str(AIRTABLE_TOKEN)[:6])
+
 
     from datetime import datetime
     import pytz
