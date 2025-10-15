@@ -4,7 +4,9 @@ import requests
 import os
 
 import os
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+
+AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
+print("✅ Render sees Airtable token:", bool(AIRTABLE_TOKEN))
 
 AIRTABLE_BASE_ID = "appK1NRDW4EAHq9PN"
 AIRTABLE_TABLE_NAME = "orders"  # or your actual table name
@@ -17,9 +19,10 @@ orders = []  # store all orders
 def send_to_airtable(order):
     url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
     headers = {
-        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Authorization": f"Bearer {AIRTABLE_TOKEN}",
         "Content-Type": "application/json"
     }
+
     from datetime import datetime
     import pytz
 
