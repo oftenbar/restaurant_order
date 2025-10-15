@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    {% if table %}
+    <h2>桌號 {{ table }}</h2>
+    {% endif %}
+
+    <meta charset="UTF-8">
+    <title>🍱 餐廳點餐系統</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f5f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background-color: #fff;
+            margin: auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #5a4634;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #70584e;
+        }
+        label {
+            display: block;
+            margin-top: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .option-group {
+            margin-top: 10px;
+        }
+        .option-group label {
+            display: block;
+            background: #fafafa;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        .option-group input {
+            margin-right: 10px;
+        }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🍱 午餐點餐表</h2>
+        <form method="post">
+            <input type="hidden" name="table" value="{{ table }}">
+            <label>電話號碼(選填-夜晚飲野9折):</label>
+            <input type="text" name="name" required>
+
+            <h3>飯類</h3>
+            <div class="option-group">
+                <label><input type="radio" name="lunch" value="香茅豬扒飯 $58" required> 香茅豬扒飯 ($58)</label>
+                <label><input type="radio" name="lunch" value="西冷牛扒飯 $58"> 西冷牛扒飯 ($58)</label>
+                <label><input type="radio" name="lunch" value="秘製雞扒飯 $58"> 秘製雞扒飯 ($58)</label>
+                <label><input type="radio" name="lunch" value="頂盛雞扒飯 $68"> 頂盛雞扒飯 ($68)</label>
+                <label><input type="radio" name="lunch" value="極上鱈魚飯 $58"> 極上鱈魚飯 ($58)</label>
+            </div>
+
+            <h3>飲野 (每款 $8)</h3>
+            <div class="option-group">
+                <label><input type="radio" name="drink" value="凍檸茶 $8"> 凍檸茶 ($8)</label>
+                <label><input type="radio" name="drink" value="檸水 $8"> 檸水 ($8)</label>
+                <label><input type="radio" name="drink" value="凍奶茶 $8"> 凍奶茶 ($8)</label>
+                <label><input type="radio" name="drink" value="凍咖啡 $8"> 凍咖啡 ($8)</label>
+                <label><input type="radio" name="drink" value="熱咖啡 $8"> 熱咖啡 ($8)</label>
+                <label><input type="radio" name="drink" value="無飲品"> ❌ 無飲品</label>
+            </div>
+
+            <div class="option-group">
+                <h3>小食（$24一款 $36兩款）</h3>
+                <label><input type="checkbox" name="snack" value="炸四色丸"> 炸四色丸</label>
+                <label><input type="checkbox" name="snack" value="炸雞翼(2隻)"> 炸雞翼(2隻)</label>
+                <label><input type="checkbox" name="snack" value="燒豬頸肉"> 燒豬頸肉</label>
+                <label><input type="checkbox" name="snack" value="炸餃子(3隻)"> 炸餃子(3隻)</label>
+                <label><input type="checkbox" name="snack" value="炸豬軟骨"> 炸豬軟骨</label>
+                <label><input type="checkbox" name="snack" value="炸物拼盤"> 炸物拼盤</label><br>
+
+            </div>
+
+            <button type="submit">提交訂單</button>
+        </form>
+    </div>
+</body>
+</html>
+
+

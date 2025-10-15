@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    {% if table %}
+  <h2>Welcome, Table {{ table }}</h2>
+{% endif %}
+
+    <meta charset="UTF-8">
+    <title>餐廳即時訂單</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background: #fffaf0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #ffb347;
+        }
+        tr:nth-child(even) {
+            background-color: #fff3e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 即時訂單列表</h1>
+
+    {% if orders %}
+        <table>
+            <thead>
+  <tr>
+    <th>桌號</th>
+    <th>電話號碼</th>
+    <th>主餐</th>
+    <th>飲品</th>
+    <th>小食</th>
+    <th>總金額</th>
+  </tr>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.table }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.lunch }}</td>
+        <td>{{ order.drink }}</td>
+        <td>
+        {% for snack in order.snacks %}
+            {{ snack }}<br>
+        {% endfor %}
+        </td>
+        <td>${{ order.total }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+        </table>
+    {% else %}
+        <p style="text-align:center;">暫時沒有訂單。</p>
+    {% endif %}
+
+    <p style="text-align:center; margin-top:20px;">
+        <a href="/menu">返回菜單</a>
+    </p>
+</body>
+</html>
