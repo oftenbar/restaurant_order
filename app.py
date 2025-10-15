@@ -101,18 +101,39 @@ def thank_you():
 def orders_dashboard():
     return render_template('orders.html', orders=orders)
 
-@app.route('/check_airtable')
-def check_airtable():
-    import requests, os
-    token = os.getenv("AIRTABLE_TOKEN")
-    url = "https://api.airtable.com/v0/appK1NRDW4EAHq9PN/orders"
-    headers = {"Authorization": f"Bearer {token}"}
-    r = requests.get(url, headers=headers)
-    return f"""
-    <h3>✅ Token starts with:</h3> {str(token)[:6]}<br>
-    <h3>🔢 Airtable Response:</h3> {r.status_code}<br>
-    <pre>{r.text}</pre>
-    """
+@app.route('/debug_airtable')
+def debug_airtable():
+    import requests
+
+    base_id = AIRTABLE_BASE_ID
+    table_name = AIRTABLE_TABLE_NAME
+    token = AIRTABLE_TOKEN
+
+    url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    test_data = {
+        "fields": {
+            "Name": "Debug Test",
+            "Table": "debug",
+            "Lunch": "None",
+            "Drink": "None",
+            "Snack": "",
+            "Total": 0
+        }
+    }
+
+    response = requests.post(url, json=test_data, headers=headers)
+    return {
+        "token_prefix": str(token)[:6],
+        "response_code": response.status_code,
+        "response_text": response.text,
+        "headers_sent": headers
+    }
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
