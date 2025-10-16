@@ -1,56 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-import requests
-import os
-
-import os
-
-AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
-print("✅ Render sees Airtable token:", bool(AIRTABLE_TOKEN))
-
-AIRTABLE_BASE_ID = "appK1NRDW4EAHq9PN"
-AIRTABLE_TABLE_NAME = "orders"  # or your actual table name
-
+from datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
 orders = []  # store all orders
 
-def send_to_airtable(order):
-    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
-    headers = {
-        "Authorization": f"Bearer {AIRTABLE_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    print("🧩 Debug Airtable headers:", headers)
-    print("🔑 AIRTABLE_TOKEN starts with:", str(AIRTABLE_TOKEN)[:6])
-
-
-    from datetime import datetime
-    import pytz
-
-    hk_tz = pytz.timezone('Asia/Hong_Kong')
-    timestamp = datetime.now(hk_tz).strftime("%Y-%m-%d %H:%M:%S")
-    
-    data = {
-        "fields": {
-            "Name": order["name"],
-            "Table": order.get("table", ""),  # ✅
-            "Lunch": order["lunch"],
-            "Drink": order["drink"],
-            "Snack": ", ".join(order["snack"]),
-            "Total": order["total"],
-            "Timestamp": datetime.now(hk_tz).isoformat()  # keeps full ISO format
-        }
-    }   
-
-    response = requests.post(url, json=data, headers=headers)
-    print("Airtable response:", response.status_code, response.text)
-
-
+# === Route: Menu Page ===
 @app.route('/menu', methods=['GET', 'POST'])
 def menu():
-    table = request.args.get('table', '')  # ✅ keep table number from URL
+    table = request.args.get('table', '')
 
     if request.method == 'POST':
         name = request.form['name']
@@ -58,6 +18,7 @@ def menu():
         drink = request.form.get('drink', '無飲品')
         snack = request.form.getlist('snack')
 
+        # Calculate total
         total = 0
         if "$" in lunch:
             total += int(lunch.split('$')[-1])
@@ -69,23 +30,23 @@ def menu():
             total += 36
 
         order = {
-            'name': name,
-            'table': table,  # ✅ save table
-            'lunch': lunch,
-            'drink': drink,
-            'snack': snack,
-            'total': total
+            "name": name,
+            "table": table,
+            "lunch": lunch,
+            "drink": drink,
+            "snack": snack,
+            "total": total
         }
 
         orders.append(order)
-        send_to_airtable(order)
+ 
 
         return redirect(url_for('thank_you', table=table, total=total))
 
     return render_template('menu.html', table=table)
 
 
-
+# === Route: Thank You Page ===
 @app.route('/thank_you')
 def thank_you():
     table = request.args.get('table', '?')
@@ -97,43 +58,13 @@ def thank_you():
     <a href='/menu?table={table}'>返回菜單</a>
     """
 
+
+# === Route: Orders Dashboard ===
 @app.route('/orders')
 def orders_dashboard():
     return render_template('orders.html', orders=orders)
 
-@app.route('/debug_airtable')
-def debug_airtable():
-    import requests
 
-    base_id = AIRTABLE_BASE_ID
-    table_name = AIRTABLE_TABLE_NAME
-    token = AIRTABLE_TOKEN
-
-    url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-
-    test_data = {
-        "fields": {
-            "Name": "Debug Test",
-            "Table": "debug",
-            "Lunch": "None",
-            "Drink": "None",
-            "Snack": "",
-            "Total": 0
-        }
-    }
-
-    response = requests.post(url, json=test_data, headers=headers)
-    return {
-        "token_prefix": str(token)[:6],
-        "response_code": response.status_code,
-        "response_text": response.text,
-        "headers_sent": headers
-    }
-
-
+# === Run App Locally ===
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
