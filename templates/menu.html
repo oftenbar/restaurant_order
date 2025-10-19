@@ -10,6 +10,8 @@
             font-family: "Noto Sans TC", sans-serif;
             text-align: center;
             padding: 15px;
+            margin: 0; /* ✅ remove default browser margin */
+            box-sizing: border-box;
         }
         h1 {
             color: #6b3e26;
@@ -20,10 +22,11 @@
             background: white;
             border-radius: 16px;
             padding: 20px;
-            display: inline-block;
+            display: block;
             text-align: left;
             max-width: 420px;
-            width: 100%;
+            width: 90%;
+            margin: 0 auto; /* ✅ centers it horizontally */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         section {
@@ -35,7 +38,7 @@
             margin: 6px 0;
         }
         select, input[type="text"], input[type="tel"] {
-            width: 100%;
+            width: 90%;
             padding: 8px;
             border-radius: 8px;
             border: 1px solid #d2b48c;
@@ -61,19 +64,19 @@
         .price-note {
             font-size: 0.9rem;
             color: #8b5a2b;
-            text-align: center;
+            text-align: left;
             margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>📋 餐廳點餐系統</h1>
+    <h1>📋 often 午餐</h1>
     <form action="/submit_order?table={{ table_number }}" method="post">
 
         <section>
             <label>餐桌號碼：<strong>{{ table_number }}</strong></label>
-            <label for="phone">電話：</label>
+            <label for="phone">電話號碼(選填) - 夜晚飲野9折！：</label>
             <input type="tel" id="phone" name="phone" placeholder="請輸入電話號碼" required>
         </section>
 
@@ -83,7 +86,7 @@
             <label><input type="radio" name="rice" value="香茅豬扒飯">香茅豬扒飯 $58</label>
             <label><input type="radio" name="rice" value="西冷牛扒飯">西冷牛扒飯 $58</label>
             <label><input type="radio" name="rice" value="秘製雞扒飯">秘製雞扒飯 $58</label>
-            <label><input type="radio" name="rice" value="頂盛雞扒飯">頂盛雞扒飯 $68</label>
+            <label><input type="radio" name="rice" value="頂盛雜扒飯">頂盛雜扒飯 $68</label>
             <label><input type="radio" name="rice" value="極上鰻魚飯">極上鰻魚飯 $58</label>
 
             <label for="rice_option">飯類選項：</label>
@@ -106,7 +109,8 @@
             <label><input type="radio" name="drink" value="7喜">7喜</label>
             <label><input type="radio" name="drink" value="可口可樂">可口可樂</label>
             <label><input type="radio" name="drink" value="檸樂">檸樂</label>
-            <label><input type="radio" name="drink" value="檸蘇">檸蘇</label>
+            <label><input type="radio" name="drink" value="橙雜">橙雜</label>
+            <label><input type="radio" name="drink" value="檸雜">檸雜</label>
 
             <label for="drink_option">飲品選項：</label>
             <select id="drink_option" name="drink_option">
@@ -114,7 +118,7 @@
                 <option value="少冰">少冰</option>
                 <option value="少甜">少甜</option>
             </select>
-            <p class="price-note">（飲品隨餐加 $8）</p>
+            <p class="price-note">飲品隨餐加 $8 </p>
         </section>
 
         <!-- 🍟 小食 -->
