@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認訂單</title>
+    <style>
+        body {
+            background-color: #f8f1e7;
+            font-family: "Noto Sans TC", sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #6b3e26;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 8px 0;
+        }
+        .total {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #000;
+        }
+        button {
+            background-color: #6b3e26;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+        button:hover {
+            background-color: #8b5a2b;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>✅ 訂單已送出！</h1>
+
+        <p>餐桌號碼：{{ table_number }}</p>
+        <p>電話：{{ phone }}</p>
+
+        <p>🍚 飯類：{{ rice if rice else "—" }}（{{ rice_option }}）</p>
+        <p>🍹 飲品：{{ drink if drink else "—" }}（{{ drink_option }}）</p>
+
+        <p>🍟 小食：
+            {% if snacks %}
+                {{ snacks | join(", ") }}
+            {% else %}
+                —
+            {% endif %}
+        </p>
+
+        <p class="total">💰 總金額：${{ total }}</p>
+
+        <form action="/menu">
+            <button type="submit">返回點餐頁面</button>
+        </form>
+    </div>
+</body>
+</html>

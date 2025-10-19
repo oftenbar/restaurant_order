@@ -1,119 +1,136 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    {% if table %}
-    <h2>桌號 {{ table }}</h2>
-    {% endif %}
-
     <meta charset="UTF-8">
-    <title>🍱 餐廳點餐系統</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜單選擇</title>
     <style>
         body {
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            background-color: #f8f5f0;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            background-color: #fff;
-            margin: auto;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h2 {
+            background-color: #f8f1e7;
+            font-family: "Noto Sans TC", sans-serif;
             text-align: center;
-            color: #5a4634;
+            padding: 15px;
         }
-        h3 {
-            margin-top: 20px;
-            color: #70584e;
+        h1 {
+            color: #6b3e26;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        form {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            display: inline-block;
+            text-align: left;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        section {
+            margin-bottom: 25px;
         }
         label {
             display: block;
-            margin-top: 8px;
+            font-size: 1rem;
+            margin: 6px 0;
         }
-        input[type="text"] {
+        select, input[type="text"], input[type="tel"] {
             width: 100%;
             padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #d2b48c;
             margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
         }
-        .option-group {
-            margin-top: 10px;
-        }
-        .option-group label {
-            display: block;
-            background: #fafafa;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-        .option-group input {
-            margin-right: 10px;
+        input[type="radio"], input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 8px;
         }
         button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 12px;
-            background-color: #4CAF50;
-            border: none;
+            background-color: #6b3e26;
             color: white;
-            font-size: 16px;
-            border-radius: 8px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
             cursor: pointer;
+            width: 100%;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #8b5a2b;
+        }
+        .price-note {
+            font-size: 0.9rem;
+            color: #8b5a2b;
+            text-align: center;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>🍱 午餐點餐表</h2>
-        <form method="post">
-            <input type="hidden" name="table" value="{{ table }}">
-            <label>電話號碼(選填-夜晚飲野9折):</label>
-            <input type="text" name="name" required>
 
-            <h3>飯類</h3>
-            <div class="option-group">
-                <label><input type="radio" name="lunch" value="香茅豬扒飯 $58" required> 香茅豬扒飯 ($58)</label>
-                <label><input type="radio" name="lunch" value="西冷牛扒飯 $58"> 西冷牛扒飯 ($58)</label>
-                <label><input type="radio" name="lunch" value="秘製雞扒飯 $58"> 秘製雞扒飯 ($58)</label>
-                <label><input type="radio" name="lunch" value="頂盛雞扒飯 $68"> 頂盛雞扒飯 ($68)</label>
-                <label><input type="radio" name="lunch" value="極上鱈魚飯 $58"> 極上鱈魚飯 ($58)</label>
-            </div>
+    <h1>📋 餐廳點餐系統</h1>
+    <form action="/submit_order?table={{ table_number }}" method="post">
 
-            <h3>飲野 (每款 $8)</h3>
-            <div class="option-group">
-                <label><input type="radio" name="drink" value="凍檸茶 $8"> 凍檸茶 ($8)</label>
-                <label><input type="radio" name="drink" value="檸水 $8"> 檸水 ($8)</label>
-                <label><input type="radio" name="drink" value="凍奶茶 $8"> 凍奶茶 ($8)</label>
-                <label><input type="radio" name="drink" value="凍咖啡 $8"> 凍咖啡 ($8)</label>
-                <label><input type="radio" name="drink" value="熱咖啡 $8"> 熱咖啡 ($8)</label>
-                <label><input type="radio" name="drink" value="無飲品"> ❌ 無飲品</label>
-            </div>
+        <section>
+            <label>餐桌號碼：<strong>{{ table_number }}</strong></label>
+            <label for="phone">電話：</label>
+            <input type="tel" id="phone" name="phone" placeholder="請輸入電話號碼" required>
+        </section>
 
-            <div class="option-group">
-                <h3>小食（$24一款 $36兩款）</h3>
-                <label><input type="checkbox" name="snack" value="炸四色丸"> 炸四色丸</label>
-                <label><input type="checkbox" name="snack" value="炸雞翼(2隻)"> 炸雞翼(2隻)</label>
-                <label><input type="checkbox" name="snack" value="燒豬頸肉"> 燒豬頸肉</label>
-                <label><input type="checkbox" name="snack" value="炸餃子(3隻)"> 炸餃子(3隻)</label>
-                <label><input type="checkbox" name="snack" value="炸豬軟骨"> 炸豬軟骨</label>
-                <label><input type="checkbox" name="snack" value="炸物拼盤"> 炸物拼盤</label><br>
+        <!-- 🍚 飯類 -->
+        <section>
+            <h2>🍚 飯類</h2>
+            <label><input type="radio" name="rice" value="香茅豬扒飯">香茅豬扒飯 $58</label>
+            <label><input type="radio" name="rice" value="西冷牛扒飯">西冷牛扒飯 $58</label>
+            <label><input type="radio" name="rice" value="秘製雞扒飯">秘製雞扒飯 $58</label>
+            <label><input type="radio" name="rice" value="頂盛雞扒飯">頂盛雞扒飯 $68</label>
+            <label><input type="radio" name="rice" value="極上鰻魚飯">極上鰻魚飯 $58</label>
 
-            </div>
+            <label for="rice_option">飯類選項：</label>
+            <select id="rice_option" name="rice_option">
+                <option value="正常">正常</option>
+                <option value="少飯">少飯</option>
+                <option value="多飯">多飯</option>
+            </select>
+        </section>
 
-            <button type="submit">提交訂單</button>
-        </form>
-    </div>
+        <!-- 🍹 飲品 -->
+        <section>
+            <h2>🍹 飲品</h2>
+            <label><input type="radio" name="drink" value="凍檸茶">凍檸茶</label>
+            <label><input type="radio" name="drink" value="檸水">檸水</label>
+            <label><input type="radio" name="drink" value="凍奶茶">凍奶茶</label>
+            <label><input type="radio" name="drink" value="凍咖啡">凍咖啡</label>
+            <label><input type="radio" name="drink" value="熱咖啡">熱咖啡</label>
+            <label><input type="radio" name="drink" value="雜果賓治">雜果賓治</label>
+            <label><input type="radio" name="drink" value="7喜">7喜</label>
+            <label><input type="radio" name="drink" value="可口可樂">可口可樂</label>
+            <label><input type="radio" name="drink" value="檸樂">檸樂</label>
+            <label><input type="radio" name="drink" value="檸蘇">檸蘇</label>
+
+            <label for="drink_option">飲品選項：</label>
+            <select id="drink_option" name="drink_option">
+                <option value="正常">正常</option>
+                <option value="少冰">少冰</option>
+                <option value="少甜">少甜</option>
+            </select>
+            <p class="price-note">（飲品隨餐加 $8）</p>
+        </section>
+
+        <!-- 🍟 小食 -->
+        <section>
+            <h2>🍟 小食</h2>
+            <label><input type="checkbox" name="snacks" value="炸四色丸 (5粒)">炸四色丸 (5粒)</label>
+            <label><input type="checkbox" name="snacks" value="炸雞翼 (2隻)">炸雞翼 (2隻)</label>
+            <label><input type="checkbox" name="snacks" value="燒豬頸肉">燒豬頸肉</label>
+            <label><input type="checkbox" name="snacks" value="炸餃子 (3隻)">炸餃子 (3隻)</label>
+            <label><input type="checkbox" name="snacks" value="炸豬軟骨">炸豬軟骨</label>
+            <label><input type="checkbox" name="snacks" value="炸物拼盤">炸物拼盤</label>
+            <p class="price-note">1款 $24 ｜ 2款或以上 $36</p>
+        </section>
+
+        <button type="submit">送出訂單 ✅</button>
+    </form>
+
 </body>
 </html>
-
-

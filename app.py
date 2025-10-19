@@ -1,70 +1,66 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-from datetime import datetime
-import pytz
-
 app = Flask(__name__)
 
-orders = []  # store all orders
+orders = []
 
-# === Route: Menu Page ===
 @app.route('/menu', methods=['GET', 'POST'])
 def menu():
-    table = request.args.get('table', '')
+    table = request.args.get('table', '')  # get table number from ?table=1
+    return render_template("menu.html", table_number=table)
 
-    if request.method == 'POST':
-        name = request.form['name']
-        lunch = request.form['lunch']
-        drink = request.form.get('drink', '無飲品')
-        snack = request.form.getlist('snack')
+@app.route('/submit_order', methods=["POST"])
+def submit_order():
+    table_number = request.args.get("table", " ")
+    phone = request.form.get("phone")
 
-        # Calculate total
-        total = 0
-        if "$" in lunch:
-            total += int(lunch.split('$')[-1])
-        if "8" in drink:
-            total += 8
-        if len(snack) == 1:
-            total += 24
-        elif len(snack) >= 2:
-            total += 36
+    # 🥢 Read main and sub-options
+    rice = request.form.get("rice")
+    rice_option = request.form.get("rice_option", "正常")
 
-        order = {
-            "name": name,
-            "table": table,
-            "lunch": lunch,
-            "drink": drink,
-            "snack": snack,
-            "total": total
-        }
+    drink = request.form.get("drink")
+    drink_option = request.form.get("drink_option", "正常")
 
-        orders.append(order)
- 
+    snacks = request.form.getlist("snacks")
 
-        return redirect(url_for('thank_you', table=table, total=total))
+    # 💰 Pricing rules
+    rice_prices = {
+        "香茅豬扒飯": 58,
+        "西冷牛扒飯": 58,
+        "秘製雞扒飯": 58,
+        "頂盛雞扒飯": 68,
+        "極上鰻魚飯": 58
+    }
 
-    return render_template('menu.html', table=table)
+    total = 0
+    rice_price = rice_prices.get(rice, 0)
+    total += rice_price
 
+    if drink:
+        total += 8  # Add $8 if drink is selected
 
-# === Route: Thank You Page ===
-@app.route('/thank_you')
-def thank_you():
-    table = request.args.get('table', '?')
-    total = request.args.get('total', 0)
-    return f"""
-    <h2>感謝您的訂單！🎉</h2>
-    <p>餐桌號碼：{table}</p>
-    <p>您的餐點總金額是：<b>${total}</b></p>
-    <a href='/menu?table={table}'>返回菜單</a>
-    """
+    if len(snacks) == 1:
+        total += 24
+    elif len(snacks) >= 2:
+        total += 36
 
+    order = {
+        "table_number": table_number,
+        "phone": phone,
+        "rice": rice,
+        "rice_option": rice_option,
+        "drink": drink,
+        "drink_option": drink_option,
+        "snacks": snacks,
+        "total": total
+    }
 
-# === Route: Orders Dashboard ===
+    orders.append(order)
+    return render_template("confirmation.html", **order)
+
 @app.route('/orders')
-def orders_dashboard():
-    return render_template('orders.html', orders=orders)
+def order_list():
+    return render_template("orders.html", orders=orders)
 
-
-# === Run App Locally ===
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
